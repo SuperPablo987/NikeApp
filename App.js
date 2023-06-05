@@ -8,16 +8,12 @@ export default function App() {
       <FlatList
         data={products}
         renderItem={({ item }) => (
-          <Image 
-            source={{
-              uri: "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/nike/nike1.png",
-            }}
-            style={styles.image}
-          />
+          <View style={styles.itemContainer}>
+            <Image source={{ uri: item.image}} style={styles.image} />
+          </View>
         )}
       />
-      
-      
+
       <StatusBar style="auto" />
     </View>
   );
@@ -29,6 +25,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  itemContainer: {
+    width: "50%",
+    padding: 1,
   },
   image: {width: "100%", 
   aspectRatio: 1,
