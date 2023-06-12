@@ -1,8 +1,10 @@
 import { StyleSheet, View, Image, FlatList, useWindowDimensions, Text, ScrollView, Pressable,  } from "react-native";
 import products from "../data/products";
+import { useSelector } from 'react-redux';
 
 const ProductDetailsScreen = () => {
-  const product = products[0];
+  // const product = products[0]; //dummy data
+  const product = useSelector((state) => state.products.selectedProduct);
 
   const { width } = useWindowDimensions();
 
@@ -15,7 +17,7 @@ const ProductDetailsScreen = () => {
       <ScrollView>
         {/* Image Carousel */}
         <FlatList 
-          data={product.images}
+          data={product?.images ? product.images : []}
           renderItem={({item}) => (
             <Image 
               source={{uri: item}} 
@@ -29,19 +31,19 @@ const ProductDetailsScreen = () => {
         
         <View style={{padding: 20}}>
           {/* Title */}
-          <Text style={styles.title}>{product.name}</Text>
+          <Text style={styles.title}>{product?.name}</Text>
 
           {/* Price */}
-          <Text style={styles.price}>${product.price}</Text>
+          <Text style={styles.price}>${product?.price}</Text>
 
           {/* Description */}
-          <Text style={styles.description}>{product.description}</Text>
+          <Text style={styles.description}>{product?.description}</Text>
         </View>
       </ScrollView>
 
       {/* Add to cart button */}
       <Pressable onPress={addToCart} style={styles.button}>
-        <Text style={styles.buttonText}>Add to cat</Text>
+        <Text style={styles.buttonText}>Add to cart</Text>
       </Pressable>
 
       {/* Navigation icon */}
