@@ -14,3 +14,4 @@ npx expo install react-native-web@~0.18.7 react-dom@18.0.0 @expo/webpack-config@
 navigation:
 npx expo install @react-navigation/native @react-navigation/native-stack react-native-screens react-native-safe-area-context
 
+npx expo install react-native-gesture-handler

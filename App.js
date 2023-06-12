@@ -4,11 +4,12 @@ import Navigation from './src/components/navigation';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Navigation />
+    <Navigation />
+    // <View style={styles.container}>
+      
 
-      <StatusBar style="auto" />
-    </View>
+    //   <StatusBar style="auto" />
+    // </View>
   );
 }
 
