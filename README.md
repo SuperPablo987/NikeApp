@@ -2,7 +2,7 @@
 React Native App with Redux And later Stripe
 
 https://www.youtube.com/watch?v=Gvxv6JCabA8
-2:43:21
+3:13:33
 
 in project directory run in cmd:
 (make sure to do it in cmd because for some reason it does not work in VS Code)
