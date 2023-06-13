@@ -11,6 +11,7 @@ const ProductDetailsScreen = () => {
 
   const addToCart = () => {
     dispatch(cartSlice.actions.addCartItem({ product }));
+    alert('Item added to cart');
   };
 
   return (
@@ -44,7 +45,9 @@ const ProductDetailsScreen = () => {
 
       {/* Add to cart button */}
       <Pressable onPress={addToCart} style={styles.button}>
-        <Text style={styles.buttonText}>Add to cart</Text>
+        <Text style={styles.buttonText}>
+          Add to car
+        </Text>
       </Pressable>
 
       {/* Navigation icon */}
