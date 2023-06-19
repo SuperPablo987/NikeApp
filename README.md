@@ -15,3 +15,6 @@ npm install @reduxjs/toolkit react-redux
 
 not sure if needed....:
 npx expo install react-native-gesture-handler
+
+to run this run:
+npm/yarn start

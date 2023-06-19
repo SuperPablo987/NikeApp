@@ -1,12 +1,13 @@
-import { Text, View, FlatList, StyleSheet, Pressable } from 'react-native';
+import { Text, View, FlatList, StyleSheet, Pressable, ActivityIndicator, Alert } from 'react-native';
 // import cart from '../data/cart'; //dummy data
 import CartListItem from '../components/CartListItem';
-import { useSelector } from 'react-redux';
-import { selectDeliveryPrice, selectSubtotal, selectTotalPrice } from '../store/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectDeliveryPrice, selectSubtotal, selectTotalPrice, cartSlice } from '../store/cartSlice';
+import { useCreateOrderMutation } from '../store/apiSlice';
 
 const ShoppingCartTotals = () => {
     const subtotal = useSelector(selectSubtotal);
-    const deliverFee = useSelector(selectDeliveryPrice);
+    const deliveryFee = useSelector(selectDeliveryPrice);
     const totalCost = useSelector(selectTotalPrice);
 
     return (
@@ -17,7 +18,7 @@ const ShoppingCartTotals = () => {
             </View>
             <View style={styles.row}>
                 <Text style={styles.text}>Delivery</Text>
-                <Text style={styles.text}>US$ {deliverFee} </Text>
+                <Text style={styles.text}>US$ {deliveryFee} </Text>
             </View>
             <View style={styles.row}>
                 <Text style={styles.textBold}>Total</Text>
@@ -28,7 +29,37 @@ const ShoppingCartTotals = () => {
 };
 
 const ShoppingCart = () => {
-    const cartItems = useSelector(state => state.cart.items)
+    const subtotal = useSelector(selectSubtotal);
+    const deliveryFee = useSelector(selectDeliveryPrice);
+    const totalCost = useSelector(selectTotalPrice);
+    const dispatch = useDispatch();
+
+    const cartItems = useSelector(state => state.cart.items);
+
+    const [createOrder, {data, error, isLoading}] = useCreateOrderMutation();
+
+    const onCreateOrder = async () => {
+        const result = await createOrder({
+            items: cartItems,
+            subtotal,
+            deliveryFee,
+            totalCost,
+            customer: {
+                name: "Vadim",
+                address: "My Home",
+                email: 'vadim@notjust.dev',
+            },
+        });
+
+        if (result.data?.status === 'OK'){
+            Alert.alert(
+                "Order has been submitted",
+                `Your order reference is: ${result.data.data.ref}`
+            );
+            dispatch(cartSlice.actions.clear());
+        }
+    };
+
     return (
         <>
         <FlatList 
@@ -36,8 +67,12 @@ const ShoppingCart = () => {
             renderItem={({ item }) => <CartListItem cartItem={item} />}
             ListFooterComponent={ShoppingCartTotals}
         />
-        <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Checkout</Text>
+        <Pressable onPress={onCreateOrder}
+            style={styles.button}>
+                <Text style={styles.buttonText}>
+                    Checkout 
+                    {isLoading && <ActivityIndicator />}
+                </Text>
         </Pressable>
         </>
     );

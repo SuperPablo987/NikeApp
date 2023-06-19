@@ -8,6 +8,7 @@ const ProductDetailsScreen = ({route}) => {
   const id = route.params.id
 
   const { data, isLoading, error } = useGetProductQuery(id);
+  const product = data?.data;
 
   // dummy data method
   // const product = useSelector((state) => state.products.selectedProduct);
@@ -28,8 +29,6 @@ const ProductDetailsScreen = ({route}) => {
   if (error) {
     return <Text>Error fetching the product. {error.error}</Text>
   }
-
-  const product = data.data;
 
   return (
     <View>
