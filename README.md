@@ -13,10 +13,16 @@ npx expo install @react-navigation/native @react-navigation/native-stack react-n
 
 npm install @reduxjs/toolkit react-redux
 
+to stand this up run:
+npm install
+
 to run this run:
 npm start
 
+<<<<<<< HEAD
 
 for stripe integration:
 
 npx expo install @stripe/stripe-react-native
+=======
+>>>>>>> c59094e753d212ac0047e5e0207f7eb37a61cf9c
