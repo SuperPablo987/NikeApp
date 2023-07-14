@@ -3,7 +3,8 @@ import { Text, View, FlatList, StyleSheet, Pressable, ActivityIndicator, Alert }
 import CartListItem from '../components/CartListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDeliveryPrice, selectSubtotal, selectTotalPrice, cartSlice } from '../store/cartSlice';
-import { useCreateOrderMutation } from '../store/apiSlice';
+import { useCreateOrderMutation, useCreatePaymentIntentMutation } from '../store/apiSlice';
+import { useStripe } from '@stripe/stripe-react-native';
 
 const ShoppingCartTotals = () => {
     const subtotal = useSelector(selectSubtotal);
@@ -38,6 +39,51 @@ const ShoppingCart = () => {
 
     const [createOrder, {data, error, isLoading}] = useCreateOrderMutation();
 
+    const [createPaymentIntent] = useCreatePaymentIntentMutation();
+
+    const { initPaymentSheet, presentPaymentSheet } = useStripe();
+
+    const onCheckout = async () => {
+        // 1. Create a payment intent
+        const response = await createPaymentIntent({ 
+            amount: Math.floor(totalCost * 100),
+        });
+        if (response.error) {
+            console.log(response.error);
+            Alert.alert('Something went wrong');
+            return;
+        }
+       
+        // 2. Initialize the Payment sheet
+        const initResponse = await initPaymentSheet({
+            merchantDisplayName: 'WuTang Analytics',
+            paymentIntentClientSecret: response.data.paymentIntent,
+            // defaultBillingDetails: {
+            //     name: 'v',
+            //     address: ""
+            // }
+        });
+        if (initResponse.error) {
+            console.log(initResponse.error);
+            Alert.alert('Something went wrong');
+            return;
+        }
+        
+        // 3. Present the Payment Sheet from Stripe
+        const paymentResponse = await presentPaymentSheet();
+
+        if (paymentResponse.error) {
+            Alert.alert(
+                `Error code: ${paymentResponse.error.code}`, 
+                paymentResponse.error.message
+            );
+            return;
+        }
+        
+        // 4. If payment ok -> create the order
+        onCreateOrder();
+      };
+
     const onCreateOrder = async () => {
         const result = await createOrder({
             items: cartItems,
@@ -67,7 +113,7 @@ const ShoppingCart = () => {
             renderItem={({ item }) => <CartListItem cartItem={item} />}
             ListFooterComponent={ShoppingCartTotals}
         />
-        <Pressable onPress={onCreateOrder}
+        <Pressable onPress={onCheckout}
             style={styles.button}>
                 <Text style={styles.buttonText}>
                     Checkout 

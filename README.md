@@ -14,4 +14,9 @@ npx expo install @react-navigation/native @react-navigation/native-stack react-n
 npm install @reduxjs/toolkit react-redux
 
 to run this run:
-npm/yarn start
+npm start
+
+
+for stripe integration:
+
+npx expo install @stripe/stripe-react-native
