@@ -19,10 +19,10 @@ npm install
 to run this run:
 npm start
 
-<<<<<<< HEAD
+
 
 for stripe integration:
 
 npx expo install @stripe/stripe-react-native
-=======
->>>>>>> c59094e753d212ac0047e5e0207f7eb37a61cf9c
+
+
